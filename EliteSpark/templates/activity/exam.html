@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Exam{% endblock %}
+
+{% block body %}
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">Exams</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <a href="./compose_exam.html" class="btn btn-primary">+ Start new exam</a>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid bg-white">
+        <section>
+            <h2 class="p-3">Active exams</h2>
+            <div class="row">
+                <div class="col-md-3">
+                    <!-- small box -->
+                    <div class="small-box bg-info">
+                        <div class="inner">
+                            <h3>60 <span style="font-size: small; font-weight: lighter;">marks</span></h3>
+                            <p>Physics</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fas fa-temperature-high"></i>
+                        </div>
+                        <a href="./exam_info.html" class="small-box-footer">Start exam <i
+                                class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <!-- small box -->
+                    <div class="small-box bg-success">
+                        <div class="inner">
+                            <h3>40 <span style="font-size: small; font-weight: lighter;">marks</span></h3>
+                            <p>Chemistry</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fas fa-flask"></i>
+                        </div>
+                        <a href="#" class="small-box-footer">Start exam <i
+                                class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="p-3">Scheduled exams</h2>
+            <div class="row">
+                <div class="col-md-3">
+                    <!-- small box -->
+                    <div class="small-box bg-danger">
+                        <div class="inner">
+                            <h3>60 <span style="font-size: small; font-weight: lighter;">marks</span></h3>
+                            <p><b>Biology</b> on 31st december 2021</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <a href="#" class="small-box-footer">More info<i
+                                class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <!-- small box -->
+                    <div class="small-box bg-warning">
+                        <div class="inner">
+                            <h3>40 <span style="font-size: small; font-weight: lighter;">marks</span></h3>
+                            <p><b>Mathematics</b> on 1st january 2022</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fas fa-analytics"></i>
+                        </div>
+                        <a href="#" class="small-box-footer">More info <i
+                                class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div><!-- /.container-fluid -->
+</section>
+<!-- /.content -->
+{% endblock %}
+

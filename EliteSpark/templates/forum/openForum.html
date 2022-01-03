@@ -1,0 +1,283 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Credits{% endblock %}
+
+{% block style %}
+<style>
+    @media only screen and (max-width:600px) {
+        .forum-like-dislike {
+            display: none;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Start A New Forum</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item"><a href="./forum.html">Forum</a></li>
+                    <li class="breadcrumb-item active">Compose</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+        <div class="row bg-white w-100 h-100">
+            <div class="col-md-9">
+                <div class="d-flex justify-content-between p-2">
+                    <div class="d-flex align-items-center">
+                        <img class="contacts-list-img" src="{% static 'dist/img/user1-128x128.jpg' %}"
+                            alt="User Avatar">
+                        <a href="../auth/profile.html" class="mx-3"
+                            style="color: #4D9CF5; text-decoration: none;">Unaib</a>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <span style="font-size: small;" class="mx-3">12 Nov</span>
+                        <i style="cursor: pointer;" class="fas fa-ellipsis-v"></i>
+                    </div>
+                </div>
+                <div class="my-2 p-2" style="font-family: 'Yanone Kaffeesatz', sans-serif;">
+                    <h3>This is the topic name </h3>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus fuga hic maxime
+                        odit nostrum necessitatibus facere dicta deserunt, accusantium voluptatem ex illum
+                        perferendis nisi velit placeat ratione adipisci incidunt quod modi? Cumque, deserunt
+                        possimus.
+                    </p>
+                </div>
+                <div class="d-flex mt-4">
+                    <div class="m-2 d-flex flex-column justify-content-center align-items-center">
+                        <div>
+                            <i style="cursor: pointer;" class="far fa-comment fa-2x"></i>
+                        </div>
+                        <div class="my-2">
+                            <i class="far fa-comment"></i>
+                            <span>3</span>
+                        </div>
+                    </div>
+                    <div class="m-2 d-flex flex-column justify-content-center align-items-center">
+                        <div>
+                            <i id="not-like-btn" style="cursor: pointer;" onclick="toggleLike()"
+                                class="far fa-heart fa-2x is-active"></i>
+                            <i id="liked-btn" style="cursor: pointer; color: red; display: none;"
+                                onclick="toggleLike()" class="fas fa-heart fa-2x"></i>
+                        </div>
+                        <div class="my-2">
+                            <i class="far fa-heart"></i>
+                            <span>12</span>
+                        </div>
+                    </div>
+                    <div class="m-2 d-flex flex-column justify-content-center align-items-center"
+                        style="position: absolute; right: 5%;">
+                        <div>
+                            <i style="cursor: pointer;" class="fa fa-share fa-2x"></i>
+                        </div>
+                        <div class="my-2">
+                            <i class="fas fa-share"></i>
+                            <span>3</span>
+                        </div>
+                    </div>
+                </div>
+
+                <hr style="border: 2px solid black; border-radius: 12px;">
+                <h3 class="p-4">2 Comments</h3>
+                <!-- Comment section -->
+                <div style="width: 80%; margin: auto;">
+                    <div class="d-flex justify-content-between p-2">
+                        <div class="d-flex align-items-center">
+                            <img class="contacts-list-img" src="{% static 'dist/img/user1-128x128.jpg' %}"
+                                alt="User Avatar">
+                            <a href="../auth/profile.html" class="mx-3"
+                                style="color: #4D9CF5; text-decoration: none;">Unaib</a>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <span style="font-size: small;" class="mx-3">12 Nov</span>
+                        </div>
+                    </div>
+                    <div class="my-2 p-2" style="font-family: 'Yanone Kaffeesatz', sans-serif;">
+                        <h5>This is the topic name </h5>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus fuga hic
+                            maxime
+                            odit nostrum necessitatibus facere dicta deserunt, accusantium voluptatem ex
+                            illum
+                            perferendis nisi velit placeat ratione adipisci incidunt quod modi? Cumque,
+                            deserunt
+                            possimus.
+                        </p>
+                    </div>
+                    <div class="d-flex mt-2">
+                        <div class="mx-3 d-flex flex-column justify-content-center align-items-center">
+                            <div>
+                                <i id="not-like-btn" style="cursor: pointer;" onclick="toggleLike()"
+                                    class="far fa-heart fa-lg is-active"></i>
+                                <i id="liked-btn" style="cursor: pointer; color: red; display: none;"
+                                    onclick="toggleLike()" class="fas fa-heart fa-lg"></i>
+                            </div>
+                            <div class="my-2">
+                                <i class="far fa-heart"></i>
+                                <span>12</span>
+                            </div>
+                        </div>
+                        <div class="mx-3 d-flex flex-column justify-content-center align-items-center">
+                            <div>
+                                <i style="cursor: pointer;" class="fa fa-share fa-lg"></i>
+                            </div>
+                            <div class="my-2">
+                                <i class="fas fa-share"></i>
+                                <span>3</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+
+                <div style="width: 80%; margin: auto;">
+                    <div class="d-flex justify-content-between p-2">
+                        <div class="d-flex align-items-center">
+                            <img class="contacts-list-img" src="{% static 'dist/img/user1-128x128.jpg' %}"
+                                alt="User Avatar">
+                            <a href="../auth/profile.html" class="mx-3"
+                                style="color: #4D9CF5; text-decoration: none;">Unaib</a>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <span style="font-size: small;" class="mx-3">12 Nov</span>
+                        </div>
+                    </div>
+                    <div class="my-2 p-2" style="font-family: 'Yanone Kaffeesatz', sans-serif;">
+                        <h5>This is the topic name </h5>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus fuga hic
+                            maxime
+                            odit nostrum necessitatibus facere dicta deserunt, accusantium voluptatem ex
+                            illum
+                            perferendis nisi velit placeat ratione adipisci incidunt quod modi? Cumque,
+                            deserunt
+                            possimus.
+                        </p>
+                    </div>
+                    <div class="d-flex mt-2">
+                        <div class="mx-3 d-flex flex-column justify-content-center align-items-center">
+                            <div>
+                                <i id="not-like-btn" style="cursor: pointer;" onclick="toggleLike()"
+                                    class="far fa-heart fa-lg is-active"></i>
+                                <i id="liked-btn" style="cursor: pointer; color: red; display: none;"
+                                    onclick="toggleLike()" class="fas fa-heart fa-lg"></i>
+                            </div>
+                            <div class="my-2">
+                                <i class="far fa-heart"></i>
+                                <span>12</span>
+                            </div>
+                        </div>
+                        <div class="mx-3 d-flex flex-column justify-content-center align-items-center">
+                            <div>
+                                <i style="cursor: pointer;" class="fa fa-share fa-lg"></i>
+                            </div>
+                            <div class="my-2">
+                                <i class="fas fa-share"></i>
+                                <span>3</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div style="width: 100%;" class="d-flex justify-content-center align-items-center">
+                    <button id="load-more-btn" onclick="loadMore()" class="btn btn-secondary btn-lg"
+                        style="margin: auto;">Load more</button>
+                    <div id="load-more-spinner" class="spinner-border text-secondary d-none" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+
+                <div class="card card-primary card-outline m-2">
+                    <div class="card-header">
+                        <h3 class="card-title">Add reply</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <div class="form-group">
+                            <textarea id="compose-textarea" class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer">
+                        <div class="float-right">
+                            <button type="submit" class="btn btn-primary"><i class="far fa-paper-plane"></i>
+                                Add</button>
+                        </div>
+                        <button type="reset" class="btn btn-default"><i class="fas fa-times"></i>
+                            Discard</button>
+                    </div>
+                    <!-- /.card-footer -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <div class="col-md-3 d-flex mt-5 flex-column">
+                <button class="btn btn-info btn-lg mt-2">Comment</button>
+                <button class="btn btn-dark btn-lg mt-2">Follow User</button>
+                <div class="mt-4">
+                    <i class="far fa-heart mx-2"></i>
+                    <span class="mx-2">21 likes</span>
+                </div>
+                <div class="mt-2">
+                    <i class="far fa-comments mx-2"></i>
+                    <span class="mx-2">8 Comments</span>
+                </div>
+                <!-- Similar posts List -->
+                <div class="card card-primary card-outline mt-5 p-2">
+                    <h5 class="p-2">Similar posts</h5>
+                    <a href="#" class="p-2" style="text-decoration: none; font-size: small;">Who are
+                        you?</a>
+                    <a href="#" class="p-2" style="text-decoration: none; font-size: small;">Lorem ipsum
+                        dolor sit amet consectetur adipisicing elit. Est, dicta.</a>
+                </div>
+                <!-- /.List -->
+            </div>
+        </div>
+    </div>
+    <!-- /.container-fluid -->
+</section>
+<!-- /.content -->
+
+{% endblock %}
+
+{% block script %}
+
+<script>
+    function toggleLike() {
+        if ($("#not-like-btn").hasClass('is-active')) {
+            $("#liked-btn").css('display', 'block');
+            $("#not-like-btn").css('display', 'none');
+            $("#liked-btn").addClass('is-active');
+            $("#not-like-btn").removeClass('is-active');
+        } else {
+            $("#liked-btn").css('display', 'none');
+            $("#not-like-btn").css('display', 'block');
+            $("#liked-btn").removeClass('is-active');
+            $("#not-like-btn").addClass('is-active');
+        }
+    }
+
+    function loadMore() {
+        $('#load-more-btn').addClass('d-none');
+        $('#load-more-spinner').removeClass('d-none');
+        setTimeout(function () {
+            $('#load-more-btn').removeClass('d-none');
+            $('#load-more-spinner').addClass('d-none');
+        }, 2000);
+    }
+</script>
+
+{% endblock %}
+    

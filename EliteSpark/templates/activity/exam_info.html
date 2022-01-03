@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Exam Info{% endblock %}
+
+{% block body %}
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">Exams</h1>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid bg-white p-2">
+        <div class="p-2 my-2 w-100">
+            <h4><b>Checklist/Requirements:</b></h4>
+            <ul>
+                <li>
+                    Android phone, Desktop, Laptop (Windows / Linux / Mac) with working front camera as webcam.
+                </li>
+                <li>
+                    Make sure you are using updated browser such as <b>(Chrome or Mozilla Firefox)</b>.
+                </li>
+                <li>
+                    Must have an active internet connection (Minimum Internet Speed required is: 512 kbps / 2G+ Network Connection).
+                </li>
+                <li>
+                    Also make sure your mobile or laptop is fully charged.
+                </li>
+                <li>
+                    Keep required stationery handy with you (pencil, pen, rough sheet, etc).
+                </li>
+            </ul>
+        </div>
+        <a href="{% url 'activity:exam' %}" class="btn btn-danger mx-2">Go back</a>
+        <a href="./active_exam_que.html" class="btn btn-primary mx-2">Start exam</a>
+    </div><!-- /.container-fluid -->
+</section>
+<!-- /.content -->
+
+{% endblock %}

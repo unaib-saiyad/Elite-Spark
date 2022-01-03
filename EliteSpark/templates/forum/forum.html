@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Forum{% endblock %}
+
+{% block style %}
+<style>
+    @media only screen and (max-width:600px) {
+        .forum-like-dislike {
+            display: none;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Forum</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item active">Forum</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+        <div class="row d-flex flex-wrap-reverse">
+            <!-- Left Section -->
+            <div class="col-sm-9 d-flex flex-column align-items-center">
+                <!-- Forum Card -->
+                <div onclick="openForum()" class="row bg-white shadow-lg p-4 my-2" style="width: 90%; border-radius: 10px;
+                    cursor: pointer; font-family: 'PT Sans', sans-serif;">
+                    <div class="forum-like-dislike col-sm-2">
+                        <i class="fa fa-arrow-up my-2" style="cursor:pointer;" aria-hidden="true"></i>
+                        <br>
+                        <span class="my-2">52</span>
+                        <br>
+                        <i class="fa fa-arrow-down my-2" style="cursor: pointer;" aria-hidden="true"></i>
+                    </div>
+                    <div class="col-sm-10">
+                        <h4>This is the title of the post</h4>
+                        <p class="p" style="font-size: small;">Lorem ipsum dolor, sit amet consectetur
+                            adipisicing elit. Suscipit rerum
+                            explicabo, quam enim quo quod deserunt doloribus. Quas error corrupti suscipit
+                            doloribus officiis? Iste, cum ratione? Facilis voluptatum, illum accusamus
+                            eligendi laudantium atque dolorem!
+                        </p>
+                        <hr>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center justify-content-center">
+                                <img class="contacts-list-img" src="{% static 'dist/img/user1-128x128.jpg' %}"
+                                    alt="User Avatar">
+                                <span class="p-2" style="font-size:small;">
+                                    Posted by <a href="../auth/profile.html">Leo Messi</a>
+                                </span>
+                            </div>
+                            <div style="font-size: small;">
+                                12hrs ago
+                            </div>
+                            <div>
+                                <i class="fa fa-comments"></i><span class="px-1"
+                                    style="font-size: small;">50+</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Forum Card -->
+                <!-- Forum Card -->
+                <div class="row bg-white shadow-lg p-4 my-2" style="width: 90%; border-radius: 10px;
+                    cursor: pointer; font-family: 'PT Sans', sans-serif;">
+                    <div class="forum-like-dislike col-sm-2">
+                        <i class="fa fa-arrow-up my-2" style="cursor:pointer;" aria-hidden="true"></i>
+                        <br>
+                        <span class="my-2">52</span>
+                        <br>
+                        <i class="fa fa-arrow-down my-2" style="cursor: pointer;" aria-hidden="true"></i>
+                    </div>
+                    <div class="col-sm-10">
+                        <h4>This is the title of the post</h4>
+                        <p class="p" style="font-size: small;">Lorem ipsum dolor, sit amet consectetur
+                            adipisicing elit. Suscipit rerum
+                            explicabo, quam enim quo quod deserunt doloribus. Quas error corrupti suscipit
+                            doloribus officiis? Iste, cum ratione? Facilis voluptatum, illum accusamus
+                            eligendi laudantium atque dolorem!
+                        </p>
+                        <hr>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center justify-content-center">
+                                <img class="contacts-list-img" src="{% static 'dist/img/user1-128x128.jpg' %}"
+                                    alt="User Avatar">
+                                <span class="p-2" style="font-size:small;">
+                                    Posted by <a href="../auth/profile.html">Leo Messi</a>
+                                </span>
+                            </div>
+                            <div style="font-size: small;">
+                                12hrs ago
+                            </div>
+                            <div>
+                                <i class="fa fa-comments"></i><span class="px-1"
+                                    style="font-size: small;">50+</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Forum Card -->
+            </div>
+            <!-- End Left Section -->
+
+            <!-- Right Section -->
+            <div class="col-sm-3">
+                <a href="./compose.html" type="button" class="btn btn-primary btn-lg btn-block">+Start
+                    topic</a>
+                <!-- Top Users List -->
+                <div class="card card-primary card-outline mt-5 p-2">
+                    <h5 class="p-2">Top Users</h5>
+                    <div class="my-1 d-flex align-items-center justify-content-between">
+                        <img class="contacts-list-img" src="{% static 'dist/img/user1-128x128.jpg' %}"
+                            alt="User Avatar">
+                        <a href="../auth/profile.html" style="color: #4D9CF5;;">Unaib</a>
+                        <div class="d-flex">
+                            <span style="font-size:small;">5.5k</span>
+                            <i class="fa fa-arrow-up" style="color: #4D9CF5;" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                    <div class="my-1 d-flex align-items-center justify-content-between">
+                        <img class="contacts-list-img" src="{% static 'dist/img/user2-160x160.jpg' %}"
+                            alt="User Avatar">
+                        <a href="../auth/profile.html" style="color: #4D9CF5;;">Rushwan Ali</a>
+                        <div class="d-flex">
+                            <span style="font-size:small;">3.3k</span>
+                            <i class="fa fa-arrow-up" style="color: #4D9CF5;" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                    <div class="my-1 d-flex align-items-center justify-content-between">
+                        <img class="contacts-list-img" src="{% static 'dist/img/user4-128x128.jpg' %}"
+                            alt="User Avatar">
+                        <a href="../auth/profile.html" style="color: #4D9CF5;;">Umrain</a>
+                        <div class="d-flex">
+                            <span style="font-size:small;">3k</span>
+                            <i class="fa fa-arrow-up" style="color: #4D9CF5;" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                    <div class="my-1 d-flex align-items-center justify-content-between">
+                        <img class="contacts-list-img" src="{% static 'dist/img/user5-128x128.jpg' %}"
+                            alt="User Avatar">
+                        <a href="../auth/profile.html" style="color: #4D9CF5;;">Anas</a>
+                        <div class="d-flex">
+                            <span style="font-size:small;">1.8k</span>
+                            <i class="fa fa-arrow-up" style="color: #4D9CF5;" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                    <div class="my-1 d-flex align-items-center justify-content-between">
+                        <img class="contacts-list-img" src="{% static 'dist/img/user7-128x128.jpg' %}"
+                            alt="User Avatar">
+                        <a href="../auth/profile.html" style="color: #4D9CF5;;">Messi</a>
+                        <div class="d-flex">
+                            <span style="font-size:small;">892</span>
+                            <i class="fa fa-arrow-up" style="color: #4D9CF5;" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="d-flex align-items-center justify-content-between">
+                        <img class="contacts-list-img" src="{% static 'dist/img/user3-128x128.jpg' %}"
+                            alt="User Avatar">
+                        <a href="../auth/profile.html" style="color: #4D9CF5;;">Me</a>
+                        <div class="d-flex">
+                            <span style="font-size:small;">152</span>
+                            <i class="fa fa-arrow-up" style="color: #4D9CF5;" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.List -->
+            </div>
+            <!-- End Right Section -->
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+<!-- /.content -->
+
+{% endblock %}
+
+
+{% block script %}
+<script>
+    function openForum() {
+        window.open('http://127.0.0.1:5500/forum/openForum.html', "_self");
+    }
+</script>
+{% endblock %}

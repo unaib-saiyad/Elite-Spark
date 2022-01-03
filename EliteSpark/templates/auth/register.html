@@ -1,0 +1,44 @@
+{% extends "auth/log-auth-base.html" %}
+{% load static %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+
+<div class="login-box">
+  <div class="login-logo">
+    <a href="../../index2.html"><b>Elite</b>Spark</a>
+  </div>
+  <!-- /.login-logo -->
+  <div class="card">
+    <div class="card-body login-card-body">
+      <p class="login-box-msg">Create Account And Start Your journy</p>
+
+      <form action="../../index3.html" method="post">
+        <div class="input-group mb-3">
+          <input type="number" class="form-control" placeholder="ID Number">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-envelope"></span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <!-- /.col -->
+          <div class="col-4">
+            <button type="submit" class="btn btn-primary btn-block">Register</button>
+          </div>
+          <!-- /.col -->
+        </div>
+      </form>
+
+      <p class="mb-0">
+        <a href="login.html" class="text-center">Login For Already Register</a>
+      </p>
+    </div>
+    <!-- /.login-card-body -->
+  </div>
+</div>
+<!-- /.login-box -->
+
+{% endblock %}
