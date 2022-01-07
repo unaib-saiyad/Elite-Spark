@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+{% load static %}
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+  <h1>Elite Spark</h1>
+  <h3>{{user.username}} Wants to change the password</h3>
+  <p>Click the bellow given only if it was you otherwise don't click it!...</p>
+  <p>This url will only valid for 3 days...</p>
+  <form action="http://127.0.0.1:8000/user/reset-password/{{user.username}}/{{data}}" method="get">
+    <input type="text" style="display: none" name="encrypted-data" value="{{data}}">
+    <button type='submit'>Click Here</button>
+  </form>
+</body>
+
+</html>

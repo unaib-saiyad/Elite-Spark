@@ -84,61 +84,45 @@
                             <div class="active tab-pane" id="activity">
 
                                 <div class="d-flex">
-                                    <h3 class="h3 m-2 font-size: 1rem;">Name:</h3>
-                                    <p class="p m-2 text-justify p-2 "
-                                        style="font-family: 'Ubuntu Mono', monospace; font-size: 1rem;">Saiyad Unaib Ali Saiyad Naved Ali</p>
+                                    <h3 class="h3 m-2 font-size: 1rem;">PRN:</h3>
+                                    <p id="user-prn" class="p m-2 text-justify p-2 "
+                                        style="font-family: 'Ubuntu Mono', monospace; font-size: 1rem;"></p>
                                 </div>
-
-                                
 
                                 <div class="d-flex">
-                                    <h3 class="h3 m-2 font-size: 1rem;">Address:</h3>
-                                    <p class="p m-2 text-justify p-2 "
-                                        style="font-family: 'Ubuntu Mono', monospace; font-size: 1rem;">Shaikh London Pura</p>
+                                    <h3 class="h3 m-2 font-size: 1rem;">Full-Name:</h3>
+                                    <p id="user-fullname" class="p m-2 text-justify p-2 "
+                                        style="font-family: 'Ubuntu Mono', monospace; font-size: 1rem;"></p>
                                 </div>
-                                <div class="d-flex flex-wrap justify-content-between">
-                                    <div class="d-flex">
+                                <div class="row">
+                                    <div class="col-md-6 d-flex">
                                         <h3 class="h3 m-2 font-size: 1rem;">Email:</h3>
-                                        <p class="p m-2 text-justify p-2 "
-                                            style="font-family: 'Ubuntu Mono', monospace; font-size: 1rem;">Saiyad@gmail.com</p>
+                                        <p id="user-email" class="p m-2 text-justify p-2 "
+                                            style="font-family: 'Ubuntu Mono', monospace; font-size: 1rem;">{{user.email}}</p>
                                     </div>
 
-                                    <div class="d-flex">
-                                        <h3 class="h3 m-2 font-size: 1rem;">Mobile number:</h3>
-                                        <p class="p m-2 text-justify p-2 "
-                                            style="font-family: 'Ubuntu Mono', monospace; font-size: 1rem;">+91 7498535542</p>
+                                    <div class="col-md-6 d-flex">
+                                        <h3 class="h3 m-2 font-size: 1rem;">Name:</h3>
+                                        <p id="user-name" class="p m-2 text-justify p-2 "
+                                            style="font-family: 'Ubuntu Mono', monospace; font-size: 1rem;">{{user.first_name}} {{user.last_name}}</p>
                                     </div>
                                 </div>
 
-                                <div class="d-flex justify-content-between flex-wrap">
-                                    <div class="d-flex" style="font-weight: 1rem;">
+                                <div class="row">
+                                    <div class="col-md-6 d-flex" style="font-weight: 1rem;">
                                         <h3 class="h3 m-2 font-size: 1rem;">Roll No:</h3>
-                                        <p class="p m-2 text-justify p-2 "
-                                            style="font-family: 'Ubuntu Mono', monospace; font-size: 1rem;">12</p>
+                                        <p id="user-rollnumber" class="p m-2 text-justify p-2 "
+                                            style="font-family: 'Ubuntu Mono', monospace; font-size: 1rem;">Not mentioned yet</p>
                                     </div>
 
-                                    <div class="d-flex" style="font-weight: 1rem;">
+                                    <div class="col-md-6 d-flex" style="font-weight: 1rem;">
                                         <h3 class="h3 m-2 font-size: 1rem;">Standard:</h3>
-                                        <p class="p m-2 text-justify p-2 "
-                                            style="font-family: 'Ubuntu Mono', monospace; font-size: 1rem;">XII</p>
+                                        <p id="user-standard" class="p m-2 text-justify p-2 "
+                                            style="font-family: 'Ubuntu Mono', monospace; font-size: 1rem;">Not mentioned yet</p>
                                     </div>
                                     <div></div>
                                 </div>
 
-                                <div class="d-flex justify-content-between flex-wrap">
-                                    <div class="d-flex" style="font-weight: 1rem;">
-                                        <h3 class="h3 m-2 font-size: 1rem;">DOB:</h3>
-                                        <p class="p m-2 text-justify p-2 "
-                                            style="font-family: 'Ubuntu Mono', monospace; font-size: 1rem;">12/3/2003</p>
-                                    </div>
-
-                                    <div class="d-flex" style="font-weight: 1rem;">
-                                        <h3 class="h3 m-2 font-size: 1rem;">DOP:</h3>
-                                        <p class="p m-2 text-justify p-2 "
-                                            style="font-family: 'Ubuntu Mono', monospace; font-size: 1rem;">London</p>
-                                    </div>
-                                    <div></div>
-                                </div>
 
                             </div>
                             <!-- /.tab-pane -->

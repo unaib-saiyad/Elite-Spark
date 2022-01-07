@@ -1,0 +1,108 @@
+{% extends "auth/log-auth-base.html" %}
+{% load static %}
+
+{% block title %}Login{% endblock %}
+
+{% block body %}
+<div class="login-box">
+  <div class="login-logo">
+    <a href="{% url 'home:index' %}"><b>Elite</b>Spark</a>
+  </div>
+  <!-- /.login-logo -->
+  <div class="card">
+    <div class="card-body login-card-body">
+      <p class="login-box-msg">Email and mobile validation</p>
+
+      <form>
+        {% csrf_token %}
+        {% if prn %}
+        <input type="number" name="prn-number" hidden value="{{prn}}" required>
+        {% else %}
+        <div class="input-group mb-3">
+          <input type="text" name="prn-number" class="form-control" placeholder="PRN" required>
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-id-card"></span>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+        <div class="input-group mb-3">
+          <input type="email" name="email" class="form-control" placeholder="Email" required>
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-envelope"></span>
+            </div>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <input type="password" name="password1" class="form-control"
+           placeholder="{% if prn %}Create{% else %}Enter{% endif %} password" required>
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-lock"></span>
+            </div>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <input type="password" name="password2" class="form-control" placeholder="Re-enter password" required>
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-lock"></span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-4">
+            <button type="button" onclick="validateEmail()" class="btn btn-primary btn-block">Next <i
+                class="fas fa-arrow-right"></i></button>
+          </div>
+          <!-- /.col -->
+        </div>
+      </form>
+    </div>
+    <!-- /.login-card-body -->
+  </div>
+</div>
+<!-- /.login-box -->
+
+{% endblock %}
+
+{% block script %}
+<script>
+  function validateEmail() {
+    var csrfmiddlewaretoken = $("input[name='csrfmiddlewaretoken']").val();
+    var email = $("input[name='email']").val();
+    var password1 = $("input[name='password1']").val();
+    var password2 = $("input[name='password2']").val();
+    var prn = $("input[name='prn-number']").val();
+    $.ajax({
+      async: true,
+      method: "POST",
+      url: "{% url 'user:email-validation' %}",
+      data: {
+        csrfmiddlewaretoken: csrfmiddlewaretoken,
+        'email': email,
+        'password1': password1,
+        'password2': password2,
+        'prn-number': prn,
+      },
+      success: function (response) {
+        if (response['Status'] === false) {
+          $("#alert").append(`
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+              ` + response['Message'] + `
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          `);
+        }
+        else{
+          window.open(response['Redirect'], '_self');
+        }
+      }
+    });
+  }
+</script>
+{% endblock %}

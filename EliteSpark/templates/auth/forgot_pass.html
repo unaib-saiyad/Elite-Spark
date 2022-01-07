@@ -1,9 +1,10 @@
 {% extends "auth/log-auth-base.html" %}
 {% load static %}
 
-{% block title %}Login{% endblock %}
+{% block title %}Forgot Password{% endblock %}
 
 {% block body %}
+
 <div class="login-box">
   <div class="login-logo">
     <a href="{% url 'home:index' %}"><b>Elite</b>Spark</a>
@@ -11,11 +12,11 @@
   <!-- /.login-logo -->
   <div class="card">
     <div class="card-body login-card-body">
-      <p class="login-box-msg">WelCome Again</p>
+      <p class="login-box-msg">Please enter prn</p>
 
-      <form action="{% url 'user:login' %}" method="post">
+      <form action="{% url 'user:forgot-password' %}" method="post">
         {% csrf_token %}
-        <div class="input-group mb-3">
+        <div class="input-group">
           <input type="number" name="prn-number" class="form-control" placeholder="Enter 16 digit PRN">
           <div class="input-group-append">
             <div class="input-group-text">
@@ -25,29 +26,14 @@
         </div>
         <span id="input-error" style="color: red; font-size: small; display: none;"></span>
         <span id="input-success" style="color: green; font-size: small; display: none;"></span>
-        <div class="input-group mb-3">
-          <input type="password" name="password" class="form-control" placeholder="Password" autocomplete="off">
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-lock"></span>
-            </div>
-          </div>
-        </div>
-        <div class="row">
+        <div class="row my-2">
+          <!-- /.col -->
           <div class="col-4">
-            <button type="submit" id="submit-btn" class="btn btn-primary btn-block">Sign In</button>
+            <button type="submit" id="submit-btn" class="btn btn-primary btn-block disabled" disabled>Continue</button>
           </div>
           <!-- /.col -->
         </div>
       </form>
-
-
-      <p class="mb-1">
-        <a href="{% url 'user:forgot-password' %}">I forgot my password</a>
-      </p>
-      <p class="mb-0">
-        <a href="{% url 'user:auth' %}" class="text-center">Register a new membership</a>
-      </p>
     </div>
     <!-- /.login-card-body -->
   </div>
@@ -55,6 +41,7 @@
 <!-- /.login-box -->
 
 {% endblock %}
+
 
 {% block script %}
 <script>

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 {% load static %}
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,7 +15,8 @@
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <!-- Tempusdominus Bootstrap 4 -->
-    <link rel="stylesheet" href="{% static 'plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css' %}">
+    <link rel="stylesheet"
+        href="{% static 'plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css' %}">
     <!-- iCheck -->
     <link rel="stylesheet" href="{% static 'plugins/icheck-bootstrap/icheck-bootstrap.min.css' %}">
     <!-- JQVMap -->
@@ -64,6 +66,7 @@
 
             <!-- SEARCH FORM -->
             <form class="form-inline ml-3">
+                {% csrf_token %}
                 <div class="input-group input-group-sm">
                     <input class="form-control form-control-navbar" type="search" placeholder="Search"
                         aria-label="Search">
@@ -168,11 +171,11 @@
                 </li>
                 {% if user.is_authenticated %}
                 <li class="float-sm-right p-2">
-                    <a class="btn btn-danger btn-sm">Logout</a>
+                    <a href="{% url 'user:logout' %}" class="btn btn-danger btn-sm">Logout</a>
                 </li>
                 {% else %}
                 <li class="float-sm-right p-2">
-                    <a class="btn btn-primary btn-sm">SignUp/In</a>
+                    <a href="{% url 'user:auth' %}" class="btn btn-primary btn-sm">SignUp/In</a>
                 </li>
                 {% endif %}
             </ul>
@@ -183,8 +186,8 @@
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
             <a href="index3.html" class="brand-link">
-                <img src="{% static 'dist/img/AdminLTELogo.png' %}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
-                    style="opacity: .8">
+                <img src="{% static 'dist/img/AdminLTELogo.png' %}" alt="AdminLTE Logo"
+                    class="brand-image img-circle elevation-3" style="opacity: .8">
                 <span class="brand-text font-weight-light">Elite Spark</span>
             </a>
 
@@ -193,11 +196,12 @@
                 <!-- Sidebar user panel (optional) -->
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="image">
-                        <img src="{% static 'dist/img/user2-160x160.jpg' %}" class="img-circle elevation-2" alt="User Image">
+                        <img id="nav-user-profile" src="http://127.0.0.1:8000/media/avatar.png" class="img-circle elevation-2"
+                            alt="User Image">
                     </div>
                     <div class="info">
                         {% if user.is_authenticated %}
-                        <a href="#" class="d-block">{{user.username}}</a>
+                        <a href="{% url 'user:profile' %}" class="d-block">{{user.username}}</a>
                         {% else %}
                         <div class="d-block" style="color: white;">Anonymous User</div>
                         {% endif %}
@@ -303,6 +307,17 @@
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert {% if message.tags == 'error' %} alert-danger {% elif message.tags %} alert-{{message.tags}} {% else %} message.color {% endif %} alert-dismissible fade show"
+                role="alert">
+                <strong>Hello {% if user.is_authenticated %}{{user}}{% else %}there{% endif %}!</strong> {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {% endfor %}
+            {% endif %}
             {% block body %}{% endblock %}
         </div>
         <!-- /.content-wrapper -->
@@ -353,13 +368,36 @@
     <script src="{% static 'dist/js/demo.js' %}"></script>
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
     <script src="{% static 'dist/js/pages/dashboard.js' %}"></script>
-    
-<script>
-    $(function () {
-        //Add text editor
-        $('#compose-textarea').summernote()
-    })
-</script>
+
+    <script>
+        $(function () {
+            //Add text editor
+            $('#compose-textarea').summernote()
+        });
+        $(document).ready(function () {
+            let url = window.location.origin + "/user/api/student/data";
+            var csrfmiddlewaretoken = $("input[name='csrfmiddlewaretoken']").val();
+            $.ajax({
+                async: true,
+                method: "GET",
+                url: url,
+                data: {
+                    csrfmiddlewaretoken: csrfmiddlewaretoken,
+                },
+                success: function (response) {
+                    $('#nav-user-profile').attr('src', response[0].profile);
+                    $('#user-prn').html(response[0].prn);
+                    $('#user-fullname').html(response[0].full_name);
+                    if(response[0].roll_number != null){
+                        $('#user-rollnumber').html(response[0].roll_number);
+                    }
+                    if(response[0].standard != null){
+                        $('#user-standard').html(response[0].standard);
+                    }
+                }
+            });
+        });
+    </script>
     {% block script %}{% endblock %}
 </body>
 
