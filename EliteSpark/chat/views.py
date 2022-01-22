@@ -7,5 +7,5 @@ from django.views import View
 
 class DirectChat(View):
     def get(self, *args, **kwargs):
-        return render(self.request, 'chat/chats.html')
+        return render(self.request, 'chat/chats.html', {'navbar': 'directchat'})
 

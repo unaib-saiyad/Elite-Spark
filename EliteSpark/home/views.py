@@ -7,7 +7,7 @@ from django.views import View
 
 class Index(View):
     def get(self, *args, **kwargs):
-        return render(self.request, 'dashboard/dashboard.html')
+        return render(self.request, 'dashboard/dashboard.html', {'navbar': 'dashboard'})
 
     def post(self):
         return JsonResponse({
@@ -17,9 +17,9 @@ class Index(View):
 
 class ContactUs(View):
     def get(self, *args, **kwargs):
-        return render(self.request, 'dashboard/contactus.html')
+        return render(self.request, 'dashboard/contactus.html', {'navbar': 'contactus'})
 
 
 class Credits(View):
     def get(self, *args, **kwargs):
-        return render(self.request, 'dashboard/credits.html')
+        return render(self.request, 'dashboard/credits.html', {'navbar': 'credits'})

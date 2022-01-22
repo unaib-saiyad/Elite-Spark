@@ -68,10 +68,10 @@
             <form class="form-inline ml-3">
                 {% csrf_token %}
                 <div class="input-group input-group-sm">
-                    <input class="form-control form-control-navbar" type="search" placeholder="Search"
-                        aria-label="Search">
+                    <input class="form-control form-control-navbar" name="search" type="search" placeholder="Search"
+                        aria-label="Search" autocomplete="off">
                     <div class="input-group-append">
-                        <button class="btn btn-navbar" type="submit">
+                        <button class="btn btn-navbar" type="button">
                             <i class="fas fa-search"></i>
                         </button>
                     </div>
@@ -146,7 +146,7 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link" data-toggle="dropdown" href="#">
                         <i class="far fa-bell"></i>
-                        <span class="badge badge-warning navbar-badge">15</span>
+                        <span id="all-notification-counter" class="badge badge-warning navbar-badge">0</span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                         <span class="dropdown-item dropdown-header">15 Notifications</span>
@@ -156,10 +156,9 @@
                             <span class="float-right text-muted text-sm">3 mins</span>
                         </a>
                         <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
-                            <i class="fas fa-users mr-2"></i> 8 friend requests
-                            <span class="float-right text-muted text-sm">12 hours</span>
-                        </a>
+                        <div onclick="friendRequest('{{user.username}}')" class="dropdown-item">
+                            <i class="fas fa-users mr-2"></i> <span id="friend-notification-counter">0</span> friend requests
+                        </div>
                         <div class="dropdown-divider"></div>
                         <a href="#" class="dropdown-item">
                             <i class="fas fa-file mr-2"></i> 3 new reports
@@ -196,12 +195,17 @@
                 <!-- Sidebar user panel (optional) -->
                 <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="image">
-                        <img id="nav-user-profile" src="http://127.0.0.1:8000/media/avatar.png" class="img-circle elevation-2"
+                        {% if auth_student %}
+                        <img src="{{auth_student.profile.url}}" class="img-circle elevation-2" alt="User Image">
+                        {% else %}
+                        <img src="http://127.0.0.1:8000/media/avatar.png" class="img-circle elevation-2"
                             alt="User Image">
+                        {% endif %}
                     </div>
                     <div class="info">
                         {% if user.is_authenticated %}
-                        <a href="{% url 'user:profile' %}" class="d-block">{{user.username}}</a>
+                        <input type="number" name="user-id" value="{{user.id}}" hidden>
+                        <a href="{% url 'user:profile' username=user.username %}" class="d-block">{{user.username}}</a>
                         {% else %}
                         <div class="d-block" style="color: white;">Anonymous User</div>
                         {% endif %}
@@ -214,8 +218,10 @@
                         data-accordion="false">
                         <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-                        <li class="nav-item menu-open">
-                            <a href="{% url 'home:index' %}" class="nav-link active">
+                        <li
+                            class="nav-item {% if navbar == 'dashboard' or navbar == 'contactus' or navbar == 'credits' %} menu-open {% endif %}">
+                            <a href="{% url 'home:index' %}"
+                                class="nav-link {% if navbar == 'dashboard' or navbar == 'contactus' or navbar == 'credits' %} active {% endif %}">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
                                     Dashboard
@@ -224,27 +230,31 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{% url 'home:index' %}" class="nav-link active">
+                                    <a href="{% url 'home:index' %}"
+                                        class="nav-link {% if navbar == 'dashboard' %} active {% endif %}">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Dashboard</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{% url 'home:contact' %}" class="nav-link">
+                                    <a href="{% url 'home:contact' %}"
+                                        class="nav-link {% if navbar == 'contactus' %} active {% endif %}">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Contact Us</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{% url 'home:credits' %}" class="nav-link">
+                                    <a href="{% url 'home:credits' %}"
+                                        class="nav-link {% if navbar == 'credits' %} active {% endif %}">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Credits</p>
                                     </a>
                                 </li>
                             </ul>
                         </li>
-                        <li class="nav-item">
-                            <a href="{% url 'activity:exam' %}" class="nav-link">
+                        <li class="nav-item {% if navbar == 'exam' or navbar == 'assignment' %} menu-open {% endif %}">
+                            <a href="{% url 'activity:exam' %}"
+                                class="nav-link {% if navbar == 'exam' or navbar == 'assignment' %} active {% endif %}">
                                 <i class="nav-icon fas fa-stream"></i>
                                 <p>
                                     Activity
@@ -253,21 +263,24 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{% url 'activity:exam' %}" class="nav-link">
+                                    <a href="{% url 'activity:exam' %}"
+                                        class="nav-link {% if navbar == 'exam' %} active {% endif %}">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Exam</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{% url 'activity:assignment' %}" class="nav-link">
+                                    <a href="{% url 'activity:assignment' %}"
+                                        class="nav-link {% if navbar == 'assignment' %} active {% endif %}">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Assignment</p>
                                     </a>
                                 </li>
                             </ul>
                         </li>
-                        <li class="nav-item">
-                            <a href="{% url 'chat:direct-chat' %}" class="nav-link">
+                        <li class="nav-item {% if navbar == 'directchat' %} menu-open {% endif %}">
+                            <a href="{% url 'chat:direct-chat' %}"
+                                class="nav-link {% if navbar == 'directchat' %} active {% endif %}">
                                 <i class="nav-icon fas fa-comment"></i>
                                 <p>
                                     Chats
@@ -277,7 +290,8 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{% url 'chat:direct-chat' %}" class="nav-link">
+                                    <a href="{% url 'chat:direct-chat' %}"
+                                        class="nav-link {% if navbar == 'directchat' %} active {% endif %}">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Direct chat</p>
                                     </a>
@@ -291,7 +305,8 @@
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a href="{% url 'forum:forum' %}" class="nav-link">
+                            <a href="{% url 'forum:forum' %}"
+                                class="nav-link {% if navbar == 'forum' %} active {% endif %}">
                                 <i class="nav-icon fas fa-edit"></i>
                                 <p>
                                     Forum
@@ -306,7 +321,7 @@
         </aside>
 
         <!-- Content Wrapper. Contains page content -->
-        <div class="content-wrapper">
+        <div id="main-content-section" class="content-wrapper">
             {% if messages %}
             {% for message in messages %}
             <div class="alert {% if message.tags == 'error' %} alert-danger {% elif message.tags %} alert-{{message.tags}} {% else %} message.color {% endif %} alert-dismissible fade show"
@@ -320,6 +335,15 @@
             {% endif %}
             {% block body %}{% endblock %}
         </div>
+
+        <div id="search-query-content" class="content-wrapper" style="display: none;">
+            <div id="search-content" class="d-flex flex-wrap"></div>
+        </div>
+
+        <div id="friend-request-content" class="content-wrapper" style="display: none;">
+            {% include "chat/friend_requests.html" %}
+        </div>
+
         <!-- /.content-wrapper -->
         <footer class="main-footer">
             <strong>Copyright &copy; 2021-2022 <a href="#">EliteSpark</a>.</strong>
@@ -369,35 +393,7 @@
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
     <script src="{% static 'dist/js/pages/dashboard.js' %}"></script>
 
-    <script>
-        $(function () {
-            //Add text editor
-            $('#compose-textarea').summernote()
-        });
-        $(document).ready(function () {
-            let url = window.location.origin + "/user/api/student/data";
-            var csrfmiddlewaretoken = $("input[name='csrfmiddlewaretoken']").val();
-            $.ajax({
-                async: true,
-                method: "GET",
-                url: url,
-                data: {
-                    csrfmiddlewaretoken: csrfmiddlewaretoken,
-                },
-                success: function (response) {
-                    $('#nav-user-profile').attr('src', response[0].profile);
-                    $('#user-prn').html(response[0].prn);
-                    $('#user-fullname').html(response[0].full_name);
-                    if(response[0].roll_number != null){
-                        $('#user-rollnumber').html(response[0].roll_number);
-                    }
-                    if(response[0].standard != null){
-                        $('#user-standard').html(response[0].standard);
-                    }
-                }
-            });
-        });
-    </script>
+    <script src="{% static 'templateJS/base.js' %}"></script>
     {% block script %}{% endblock %}
 </body>
 

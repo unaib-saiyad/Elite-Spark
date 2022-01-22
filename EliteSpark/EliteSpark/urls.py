@@ -20,15 +20,11 @@ from django.urls import path, include
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', include('home.urls')),
-    path('user/', include('users.urls')),
-    path('activity/', include('activity.urls')),
-    path('chat/', include('chat.urls')),
-    path('forum/', include('forum.urls')),
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-else:
-    urlpatterns += staticfiles_urlpatterns()
-
+                  path('admin/', admin.site.urls),
+                  path('', include('home.urls')),
+                  path('user/', include('users.urls')),
+                  path('activity/', include('activity.urls')),
+                  path('chat/', include('chat.urls')),
+                  path('forum/', include('forum.urls')),
+              ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)\
+              + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

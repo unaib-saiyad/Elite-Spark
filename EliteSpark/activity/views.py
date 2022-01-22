@@ -7,9 +7,9 @@ from django.views import View
 
 class Exam(View):
     def get(self, *args, **kwargs):
-        return render(self.request, 'activity/exam.html')
+        return render(self.request, 'activity/exam.html', {'navbar': 'exam'})
 
 
 class Assignment(View):
     def get(self, *args, **kwargs):
-        return render(self.request, 'activity/assignment_list.html')
+        return render(self.request, 'activity/assignment_list.html', {'navbar': 'assignment'})

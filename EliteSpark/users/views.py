@@ -1,34 +1,84 @@
 import base64
 import datetime
 import json
+import os
 import sqlite3
+from io import BytesIO
 
 from EliteSpark.settings import SECRET_KEY
+from PIL import Image
 from cryptography.fernet import Fernet
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
-from django.contrib.auth.models import User
-from django.core.mail import send_mail
-from django.http import JsonResponse
-from django.shortcuts import render, redirect
-from django.template.loader import render_to_string
 from django.contrib import messages
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.models import User
+from django.core.files.uploadedfile import InMemoryUploadedFile
+from django.core.mail import send_mail
+from django.http import JsonResponse
+from django.shortcuts import redirect
+from django.shortcuts import render
+from django.template.loader import render_to_string
 from django.utils.decorators import method_decorator
 # Create your views here.
 from django.views import View
+from django.views.decorators.csrf import csrf_exempt
 
-from .models import StudentData
+from .models import StudentData, FriendRequest, Notification
+
+
+def imgProcess(file, user, before_img):
+    try:
+        img = Image.open(file)
+        image_format = ['JPEG', 'PNG', 'TIFF', 'EPS', 'RAW']
+        if img.format in image_format:
+            img.thumbnail((480, 480), Image.ANTIALIAS)
+            thumbnailString = BytesIO()
+            if file.size > 5242880:
+                img.save(thumbnailString, 'JPEG', quality=50)
+            else:
+                img.save(thumbnailString, 'JPEG', quality=100)
+            if before_img != 'avatar.png' and before_img != '':
+                os.remove(before_img.path)
+            newFile = InMemoryUploadedFile(thumbnailString, None, f'{user}.jpg', 'image/jpeg',
+                                           thumbnailString,
+                                           None)
+            return newFile
+        else:
+            return None
+    except:
+        return None
 
 
 class Profile(View):
     def get(self, *args, **kwargs):
-        return render(self.request, 'auth/profile.html')
+        username = self.kwargs['username']
+        user = User.objects.filter(username=username).first()
+        return render(self.request, 'auth/profile.html', {'user_obj': user})
+
+    def post(self, *args, **kwargs):
+        profile = self.request.FILES.get('profile')
+        roll_number = self.request.POST.get('roll-number', None)
+        standard = self.request.POST.get('standard', '')
+        tag = self.request.POST.get('tag', '')
+        privacy = self.request.POST.get('privacy', '')
+        user = self.request.user
+        StudentData.objects.filter(student=user).update(roll_number=roll_number, standard=standard, tag=tag,
+                                                        account_scope=privacy)
+        messages.success(self.request, "Student data updated successfully...")
+        student = StudentData.objects.filter(student=user).first()
+        if profile and student:
+            new_profile = imgProcess(profile, user, student.profile)
+            if new_profile:
+                student.profile = new_profile
+                student.save()
+            else:
+                messages.error(self.request, "Something went wrong to upload image please try again!...")
+        return redirect(f'http://127.0.0.1:8000/user/profile/{user.username}')
 
 
 class PrnAuth(View):
@@ -52,6 +102,25 @@ class PrnAuth(View):
             'Status': True,
             'Message': "Prn exist",
             "Data": data
+        })
+
+
+class UsernameCheck(View):
+    def get(self, *args, **kwargs):
+        username = self.request.GET['username']
+        if username == '':
+            return JsonResponse({
+                'Status': False,
+                'Message': 'Username should not be blank!...'
+            })
+        if User.objects.filter(username=username).exists():
+            return JsonResponse({
+                'Status': False,
+                'Message': 'Username already exists!...'
+            })
+        return JsonResponse({
+            'Status': True,
+            'Message': 'Username exists...'
         })
 
 
@@ -92,7 +161,12 @@ class Login(View):
         prn = self.request.POST.get('prn-number')
         password = self.request.POST.get('password')
         data = PrnAuth.checkPrn(self, prn)
-        user = authenticate(username=data[2].lower(), password=password)
+        student = StudentData.objects.filter(prn=data[0]).first()
+        if not student:
+            messages.error(self.request, 'Student does not exists!...')
+            return redirect("user:login")
+        user = student.student
+        user = authenticate(username=user.username, password=password)
         if user is None:
             messages.error(self.request, 'incorrect password!...')
             return redirect("user:login")
@@ -107,6 +181,7 @@ class Login(View):
 
 class EmailValidation(View):
     def post(self, *args, **kwargs):
+        username = self.request.POST.get('username')
         prn = self.request.POST.get('prn-number')
         email = self.request.POST.get('email')
         password1 = self.request.POST.get('password1')
@@ -122,12 +197,13 @@ class EmailValidation(View):
                 'Status': False,
                 'Message': "Prn doesn't exists or something went wrong please check your prn and try again later!..."
             })
-        if User.objects.filter(username=data[2].lower()).exists():
-            student = User.objects.filter(username=data[2].lower()).get()
-            if email != student.email:
+        if User.objects.filter(email=email).exists():
+            student = User.objects.filter(email=email).get()
+            studentData = StudentData.objects.filter(prn=prn).first()
+            if studentData.student != student:
                 return JsonResponse({
                     'Status': False,
-                    'Message': "Please check the email and try again later!..."
+                    'Message': "Please check your credentials and try again!..."
                 })
             student_authentication = authenticate(username=student.username, password=password1)
             if student_authentication is None:
@@ -141,7 +217,7 @@ class EmailValidation(View):
                     'Status': True,
                     'Redirect': 'http://127.0.0.1:8000/user/login/'
                 })
-        student = User.objects.create_user(username=data[2].lower(), email=email, password=password1, is_active=False,
+        student = User.objects.create_user(username=username, email=email, password=password1, is_active=False,
                                            first_name=data[2], last_name=data[3])
         student.save()
         StudentData.objects.create(student=student, prn=data[0], full_name=data[1], mother_name=data[4])
@@ -205,15 +281,8 @@ class ForgotPassword(View):
     def post(self, *args, **kwargs):
         prn = self.request.POST.get('prn-number')
         data = PrnAuth.checkPrn(self, prn)
-        try:
-            user = User.objects.filter(username=data[2].lower()).get()
-        except:
-            return render(self.request, 'error/error.html', {
-                'heading': "Something went wrong!...",
-                'message': 'Something is went wrong at this point please try again later click bellow button to go '
-                           'back to login page',
-                'redirect': "http://127.0.0.1:8000/user/login/",
-            })
+        student = StudentData.objects.filter(prn=data[0]).first()
+        user = student.student
         verification_status = send_email(user, 'email-templates/email-confirmation.html')
         if verification_status is False:
             return render(self.request, 'error/error.html', {
@@ -288,6 +357,113 @@ class PasswordReset(View):
             'message': 'Currently for the some reason we can not reset your password please try later or '
                        'pressing the bellow button to go back to dashboard',
             'redirect': "http://127.0.0.1:8000/",
+        })
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class FriendRequests(LoginRequiredMixin, View):
+    def get(self, *args, **kwargs):
+        user = self.request.user
+        receiver_username = self.kwargs['receiver']
+        receiver = User.objects.get(username=receiver_username)
+        object, created = FriendRequest.objects.get_or_create(sender=user, receiver=receiver)
+        notification, n_created = Notification.objects.get_or_create(notify_sender=user, notify_receiver=receiver,
+                                                                     message='Friend Request')
+        if created:
+            return JsonResponse({
+                'Status': True
+            })
+        else:
+            notification.delete()
+            object.delete()
+            return JsonResponse({
+                'Status': False
+            })
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class GetFriendRequestStatus(LoginRequiredMixin, View):
+    def get(self, *args, **kwargs):
+        user = self.request.user
+        receiver_username = self.kwargs['receiver']
+        receiver = User.objects.get(username=receiver_username)
+        querySet = FriendRequest.objects.filter(receiver=receiver).filter(sender=user).first()
+        if querySet:
+            if querySet.status:
+                return JsonResponse({
+                    'Status': True
+                })
+        return JsonResponse({
+            'Status': False
+        })
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class GetRequestedStatus(LoginRequiredMixin, View):
+    def get(self, *args, **kwargs):
+        user = self.request.user
+        sender_username = self.kwargs['sender']
+        sender = User.objects.get(username=sender_username)
+        querySet = FriendRequest.objects.filter(sender=sender).filter(receiver=user).first()
+        try:
+            notification = Notification.objects.filter(notify_sender=sender).filter(notify_receiver=user) \
+                .filter(message='Friend Request').get()
+            notification.is_seen = True
+            notification.save()
+        except:
+            pass
+        if querySet:
+            if querySet.status:
+                return JsonResponse({
+                    'Status': True
+                })
+        return JsonResponse({
+            'Status': False
+        })
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class ActionOnRequests(LoginRequiredMixin, View):
+    def get(self, *args, **kwargs):
+        user = self.request.user
+        sender_username = self.kwargs['sender']
+        sender = User.objects.get(username=sender_username)
+        action = self.request.GET['action']
+        sender_data = StudentData.objects.get(student=sender)
+        receiver_data = StudentData.objects.get(student=user)
+        friend_request = FriendRequest.objects.filter(sender=sender).filter(receiver=user).first()
+        notification = Notification.objects.filter(notify_sender=sender).filter(notify_receiver=user) \
+            .filter(message='Friend Request')
+        if friend_request:
+            if friend_request.status:
+                friend_request.delete()
+                notification.delete()
+                if action == 'accept':
+                    sender_data.friends.add(user)
+                    receiver_data.friends.add(sender)
+                return JsonResponse({
+                    'Status': True
+                })
+        messages.info(self.request, 'User has canceled the request!...')
+        return JsonResponse({
+            'Status': False
+        })
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class RemoeveFriend(LoginRequiredMixin, View):
+    def get(self, *args, **kwargs):
+        user = self.request.user
+        removee_username = self.request.GET['removee']
+        removee = User.objects.get(username=removee_username)
+        user_data = StudentData.objects.get(student=user)
+        removee_data = StudentData.objects.get(student=removee)
+        user_data.friends.remove(removee)
+        user_data.save()
+        removee_data.friends.remove(user)
+        removee_data.save()
+        return JsonResponse({
+            'Status': True
         })
 
 

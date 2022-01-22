@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
 
     # Django apps
     'home',
@@ -45,6 +46,8 @@ INSTALLED_APPS = [
 
     # Django-packages
     'rest_framework',
+    'django_filters',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -72,12 +75,20 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'users.context_processors.auth_student',
             ],
         },
     },
 ]
 
 WSGI_APPLICATION = 'EliteSpark.wsgi.application'
+ASGI_APPLICATION = 'EliteSpark.asgi.application'
+
+CHANNEL_LAYERS={
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+     }
+}
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases

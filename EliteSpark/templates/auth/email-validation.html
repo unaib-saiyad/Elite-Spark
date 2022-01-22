@@ -17,6 +17,17 @@
         {% csrf_token %}
         {% if prn %}
         <input type="number" name="prn-number" hidden value="{{prn}}" required>
+        <div class="input-group mb-3">
+          <input type="username" name="username" class="form-control" placeholder="username" autocomplete="off"
+            required>
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-envelope"></span>
+            </div>
+          </div>
+        </div>
+        <span id="input-error" style="color: red; font-size: small; display: none;"></span>
+        <span id="input-success" style="color: green; font-size: small; display: none;"></span>
         {% else %}
         <div class="input-group mb-3">
           <input type="text" name="prn-number" class="form-control" placeholder="PRN" required>
@@ -37,7 +48,7 @@
         </div>
         <div class="input-group mb-3">
           <input type="password" name="password1" class="form-control"
-           placeholder="{% if prn %}Create{% else %}Enter{% endif %} password" required>
+            placeholder="{% if prn %}Create{% else %}Enter{% endif %} password" required>
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>
@@ -54,8 +65,14 @@
         </div>
         <div class="row">
           <div class="col-4">
-            <button type="button" onclick="validateEmail()" class="btn btn-primary btn-block">Next <i
+            {% if prn %}
+            <button id="submit-btn" type="button disabled" onclick="validateEmail()" class="btn btn-primary btn-block"
+              disabled>
+              Next <i class="fas fa-arrow-right"></i></button>
+            {% else %}
+            <button id="submit-btn" type="button" onclick="validateEmail()" class="btn btn-primary btn-block">Next <i
                 class="fas fa-arrow-right"></i></button>
+            {% endif %}
           </div>
           <!-- /.col -->
         </div>
@@ -72,6 +89,7 @@
 <script>
   function validateEmail() {
     var csrfmiddlewaretoken = $("input[name='csrfmiddlewaretoken']").val();
+    var username = $("input[name='username']").val();
     var email = $("input[name='email']").val();
     var password1 = $("input[name='password1']").val();
     var password2 = $("input[name='password2']").val();
@@ -82,6 +100,7 @@
       url: "{% url 'user:email-validation' %}",
       data: {
         csrfmiddlewaretoken: csrfmiddlewaretoken,
+        'username': username,
         'email': email,
         'password1': password1,
         'password2': password2,
@@ -97,12 +116,37 @@
               </button>
             </div>
           `);
-        }
-        else{
+        } else {
           window.open(response['Redirect'], '_self');
         }
       }
     });
   }
+  $("input[name=username]").on('keyup', function () {
+    let username = $(this).val().replace(/ /g, '');
+    $.ajax({
+      async: true,
+      method: "GET",
+      url: "{% url 'user:username-check' %}",
+      data: {
+        'username': username,
+      },
+      success: function (response) {
+        if (response['Status'] === true) {
+          $('#input-error').css('display', 'none');
+          $('#input-success').css('display', 'block');
+          $('#input-success').html(response['Message']);
+          $('#submit-btn').removeClass('disabled');
+          $('#submit-btn').attr('disabled', false);
+        } else {
+          $('#input-success').css('display', 'none');
+          $('#input-error').css('display', 'block');
+          $('#input-error').html(response['Message']);
+          $('#submit-btn').addClass('disabled');
+          $('#submit-btn').attr('disabled', true);
+        }
+      }
+    });
+  });
 </script>
 {% endblock %}
